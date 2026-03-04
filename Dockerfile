@@ -1,6 +1,9 @@
 # bookworm, last updated 2026-02-28
 FROM debian:13
 
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD curl --fail http://localhost/ || exit 1
+
 # mailcap is for /etc/mime.types
 RUN apt-get update \
   && apt-get upgrade -y \
@@ -12,7 +15,8 @@ RUN apt-get update \
 
 # Convenience dev deps
 RUN apt-get install --no-install-recommends -y \
-  vim
+  vim \
+  curl
 
 COPY ./lighttpd.conf /etc/lighttpd/conf.d/cgit.conf
 COPY ./cgitrc /etc/cgitrc

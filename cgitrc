@@ -3,16 +3,16 @@
 #
 
 # The defaults
-#css=/cgit.css
-#logo=/cgit.png
+css=/cgit.css
+logo=/cgit.png
 
 # Following lines work with the above Apache config
 #css=/cgit-css/cgit.css
 #logo=/cgit-css/cgit.png
 
 # Following lines work with the above Lighttpd config
-css=/cgit/cgit.css
-logo=/cgit/cgit.png
+#css=/cgit/cgit.css
+#logo=/cgit/cgit.png
 
 #css=/usr/share/cgit/cgit.css
 #logo=/usr/share/cgit/cgit.png
