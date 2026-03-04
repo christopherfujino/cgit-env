@@ -9,6 +9,6 @@ fallback_to_shell() {
 
 trap fallback_to_shell INT
 
-lighttpd -D -f /etc/lighttpd/lighttpd.conf
+lighttpd -D -f /etc/lighttpd/lighttpd.conf &
 
-exec /bin/bash
+/bin/bash

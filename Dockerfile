@@ -15,6 +15,7 @@ RUN apt-get install --no-install-recommends -y \
   vim
 
 COPY ./lighttpd.conf /etc/lighttpd/conf.d/cgit.conf
+COPY ./cgitrc /etc/cgitrc
 
 RUN echo 'include "conf.d/cgit.conf"' >> /etc/lighttpd/lighttpd.conf
 
