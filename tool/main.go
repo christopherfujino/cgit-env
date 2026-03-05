@@ -54,7 +54,16 @@ func main() {
 		}
 		_, err = os.Stat(path)
 		if err != nil {
-			Exec([]string{"git", "clone", "--no-single-branch", "--tags", "--", repo.Remote, path}, reposRoot)
+			Exec([]string{
+				"git",
+				"clone",
+				"--no-single-branch",
+				"--tags",
+				//"--recurse-submodules",
+				"--",
+				repo.Remote,
+				path,
+			}, reposRoot)
 			file, err := os.Create(filepath.Join(path, ".git", "description"))
 			if err != nil {
 				panic(err)

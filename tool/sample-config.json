@@ -12,8 +12,13 @@
     },
     {
       "remote": "git@github.com:christopherfujino/dotfiles",
-      "description": "",
+      "description": "Dotfiles.",
       "local": "dotfiles"
+    },
+    {
+      "remote": "git@github.com:christopherfujino/chris-monorepo",
+      "description": "A big repo.",
+      "local": "chris-monorepo"
     }
   ]
 }

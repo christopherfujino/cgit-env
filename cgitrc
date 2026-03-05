@@ -8,26 +8,23 @@ logo=/cgit.png
 
 branch-sort=age
 enable-blame=1
-robots=noindex, nofollow
 commit-sort=topo
-enable-commit-graph=1
-
-# Allow http transport git clone
-#enable-http-clone=0
-
-
-#
-# List of repositories.
-# This list could be kept in a different file (e.g. '/etc/cgitrepos')
-# and included like this:
-#   include=/etc/cgitrepos
-#
+#enable-commit-graph=1
+enable-index-owner=0
+enable-subject-links=1
+footer=/repos/footer.html
+#head-include=/repos/head-include.html
+#header=/repos/header.html
+max-repo-count=0
+max-stats=year
+# Remove trailing .git from urls and names
+remove-suffix=1
+repository-sort=age
+robots=noindex, nofollow
+root-desc=Open source repositories
+#root-readme=/repos/root-readme.html
+root-title=Christopher Fujino
+side-by-side-diffs=1
 
 # Scan a directory
 scan-path=/repos
-
-
-# For a non-bare repository (repository with the working tree)
-#repo.url=cgit-env
-#repo.path=/repo/.git
-#repo.desc=Foo bar yolo dawg.
