@@ -2,15 +2,19 @@
 # cgit config
 #
 
-# The defaults
+# Globals
 css=/cgit.css
 logo=/cgit.png
+
+branch-sort=age
+enable-blame=1
+robots=noindex, nofollow
+commit-sort=topo
+enable-commit-graph=1
 
 # Allow http transport git clone
 #enable-http-clone=0
 
-# if you do not want that webcrawler (like google) index your site
-robots=noindex, nofollow
 
 #
 # List of repositories.

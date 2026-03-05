@@ -16,6 +16,8 @@ RUN apt-get update \
 # Convenience dev deps
 RUN apt-get install --no-install-recommends -y \
   vim \
+  man-db \
+  less \
   curl
 
 COPY ./lighttpd.conf /etc/lighttpd/conf.d/cgit.conf

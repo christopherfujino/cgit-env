@@ -9,6 +9,11 @@
       "remote": "git@github.com:christopherfujino/slothscript",
       "description": "A scripting language for automation and system administration.",
       "local": "slothscript"
+    },
+    {
+      "remote": "git@github.com:christopherfujino/dotfiles",
+      "description": "",
+      "local": "dotfiles"
     }
   ]
 }

@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
 
 type Repo struct {
@@ -15,6 +17,18 @@ type Repo struct {
 
 type Config struct {
 	Repos []Repo `json:"repos"`
+}
+
+func Exec(cmdString []string, workingDir string) {
+	fmt.Printf("> %s (%s)\n", strings.Join(cmdString, " "), workingDir)
+	var cmd = exec.Command(cmdString[0], cmdString[1:]...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Dir = workingDir
+	var err = cmd.Run()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func main() {
@@ -29,7 +43,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	const reposRoot = "../repos"
+	reposRoot, err := filepath.Abs("../repos")
+	if err != nil {
+		panic(err)
+	}
 	for _, repo := range config.Repos {
 		path, err := filepath.Abs(filepath.Join(reposRoot, repo.Local))
 		if err != nil {
@@ -37,11 +54,17 @@ func main() {
 		}
 		_, err = os.Stat(path)
 		if err != nil {
-			panic("TODO git clone...")
+			Exec([]string{"git", "clone", "--no-single-branch", "--tags", "--", repo.Remote, path}, reposRoot)
+			file, err := os.Create(filepath.Join(path, ".git", "description"))
+			if err != nil {
+				panic(err)
+			}
+			_, err = file.Write([]byte(repo.Description))
+			if err != nil {
+				panic(err)
+			}
 		} else {
-			fmt.Printf("No error stat-ing %s\n", path)
+			Exec([]string{"git", "pull", "--tags", "--ff-only"}, path)
 		}
-		fmt.Println(path)
-		fmt.Printf("%v\n", repo)
 	}
 }
