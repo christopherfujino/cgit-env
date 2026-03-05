@@ -9,6 +9,5 @@ fallback_to_shell() {
 
 trap fallback_to_shell INT
 
-lighttpd -D -f /etc/lighttpd/lighttpd.conf &
-
-/bin/bash
+# -D - Don't get to background
+lighttpd -D -f /etc/lighttpd/lighttpd.conf

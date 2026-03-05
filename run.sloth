@@ -27,7 +27,8 @@ func run() {
     '-it', # interactive, tty
     '--rm', # auto-remove when exiting
     '--name', containerName,
-    '--mount', 'type=bind,src=.,dst=/repo',
+    # TODO copy from Dockerfile
+    '--mount', 'type=bind,src=./repos,dst=/repos',
     # host:container
     '--publish', '8080:80',
     imageTag,

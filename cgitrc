@@ -6,25 +6,11 @@
 css=/cgit.css
 logo=/cgit.png
 
-# Following lines work with the above Apache config
-#css=/cgit-css/cgit.css
-#logo=/cgit-css/cgit.png
-
-# Following lines work with the above Lighttpd config
-#css=/cgit/cgit.css
-#logo=/cgit/cgit.png
-
-#css=/usr/share/cgit/cgit.css
-#logo=/usr/share/cgit/cgit.png
-
 # Allow http transport git clone
 #enable-http-clone=0
 
 # if you do not want that webcrawler (like google) index your site
 robots=noindex, nofollow
-
-# if cgit messes up links, use a virtual-root. For example, cgit.example.org/ has this value:
-#virtual-root=/
 
 #
 # List of repositories.
@@ -33,7 +19,11 @@ robots=noindex, nofollow
 #   include=/etc/cgitrepos
 #
 
+# Scan a directory
+scan-path=/repos
+
+
 # For a non-bare repository (repository with the working tree)
-repo.url=cgit-env
-repo.path=/repo/.git
-repo.desc=Foo bar yolo dawg.
+#repo.url=cgit-env
+#repo.path=/repo/.git
+#repo.desc=Foo bar yolo dawg.
