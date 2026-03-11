@@ -24,7 +24,8 @@ robots=noindex, nofollow
 root-desc=Open source repositories
 #root-readme=/repos/root-readme.html
 root-title=Christopher Fujino
+section-from-path=1
 side-by-side-diffs=1
 
-# Scan a directory
+# Scan a directory; this should be last
 scan-path=/repos

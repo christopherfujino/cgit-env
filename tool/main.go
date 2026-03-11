@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -31,8 +32,14 @@ func Exec(cmdString []string, workingDir string) {
 	}
 }
 
+// TODO lift to CLI args
+const (
+	config string = "./sample-config.json"
+	repos string = "../repos/remote"
+)
+
 func main() {
-	bytes, err := os.ReadFile("./sample-config.json")
+	bytes, err := os.ReadFile(config)
 	if err != nil {
 		panic(err)
 	}
@@ -43,10 +50,16 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	reposRoot, err := filepath.Abs("../repos")
+	reposRoot, err := filepath.Abs(repos)
 	if err != nil {
 		panic(err)
 	}
+	if _, err := os.Stat(reposRoot); errors.Is(err, os.ErrNotExist) {
+		if err := os.MkdirAll(reposRoot, 0755); err != nil {
+			panic(err)
+		}
+	}
+
 	for _, repo := range config.Repos {
 		path, err := filepath.Abs(filepath.Join(reposRoot, repo.Local))
 		if err != nil {
