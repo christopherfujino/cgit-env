@@ -23,17 +23,14 @@ type UpdateNotesRequest struct {
 
 type tee struct {
 	dir          string
-	endpointRoot string // TODO use
+	endpointRoot string
 }
 
 func (t tee) Register() {
-	var fileServer = http.StripPrefix("/notes", http.FileServer(http.Dir(filepath.Join(t.dir, "assets"))))
-	http.HandleFunc("GET /notes", func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("GET %v\n", r.URL)
-		fileServer.ServeHTTP(w, r)
-	})
+	var fileServer = http.StripPrefix(t.endpointRoot, http.FileServer(http.Dir(filepath.Join(t.dir, "assets"))))
+	http.Handle(fmt.Sprintf("GET %s/", t.endpointRoot), fileServer)
 
-	http.HandleFunc("GET /api/notes", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(fmt.Sprintf("GET /api%s", t.endpointRoot), func(w http.ResponseWriter, r *http.Request) {
 		var db = Open()
 		log.Printf("GET %v\n", r.URL.Path)
 
@@ -71,12 +68,12 @@ func (t tee) Register() {
 		fmt.Printf("%s: %s\n", reqData.Path, reqData.Contents)
 		w.WriteHeader(200)
 	})
-
 }
 
-func Create(dirPath string) service.T {
+func Create(dirPath, endpointRoot string) service.T {
 	return tee{
 		dir: dirPath,
+		endpointRoot: endpointRoot,
 	}
 }
 
