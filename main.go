@@ -1,13 +1,21 @@
 package main
 
 import (
+	"christopherfujino.com/distributed-compute-monorepo/notes"
+	"christopherfujino.com/distributed-compute-monorepo/service"
+
 	"fmt"
 	"net/http"
-	"christopherfujino.com/distributed-compute-monorepo/notes"
 )
 
+var services = []service.T{
+	notes.Create("./notes", "/notes"),
+}
+
 func main() {
-	notes.Create("./notes", "/notes").Register()
+	for _, service := range services {
+		service.Register()
+	}
 	fmt.Println("Listening on 127.0.0.1:8080")
 
 	var err = http.ListenAndServe("127.0.0.1:8080", nil)
