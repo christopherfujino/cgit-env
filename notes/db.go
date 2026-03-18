@@ -4,7 +4,7 @@ package notes
 
 type DB map[string]string
 
-var global DB
+var global DB = map[string]string{}
 
 func Open() *DB {
 	//return &DB{}
@@ -17,7 +17,7 @@ func (d *DB) Write(path string, contents string) {
 }
 
 func (d DB) GetAllPaths() []string {
-	var paths []string
+	var paths = []string{}
 
 	for k, _ := range d {
 		paths = append(paths, k)

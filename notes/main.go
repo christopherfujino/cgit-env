@@ -44,6 +44,7 @@ func (t tee) Register() {
 			_, _ = w.Write([]byte(err.Error()))
 			return
 		}
+		fmt.Printf("DEBUG response: %s\n", resBytes)
 		_, err = w.Write(resBytes)
 		if err != nil {
 			log.Printf("Error failed to write response: %s\n", err.Error())

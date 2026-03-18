@@ -5,6 +5,11 @@ import { html } from 'https://esm.sh/htm@3.1.1/preact';
 
 const Route = createContext("");
 
+function error(msg) {
+  // TODO have this update UI
+  console.error(msg);
+}
+
 function Browser(_) {
   const [files, updateFiles] = useState(null);
   if (files === null) {
@@ -13,11 +18,15 @@ function Browser(_) {
     }).then(function(res) {
       if (!res.ok) {
         // TODO surface this in UI
-        console.error("Bad response:", res);
+        error(`Bad response: ${res}`);
       } else {
         res.json().then((res) => {
-          console.log("Got it!", res.files);
-          updateFiles(res.files);
+          if (res.files == null) {
+            console.error("API should not return NULL files!")
+          } else {
+            console.log("Got it!", res.files);
+            updateFiles(res.files);
+          }
         });
       }
     });
@@ -26,7 +35,7 @@ function Browser(_) {
   } else {
     return html`
     <ul>
-      ${files.reduce((acc, cur) => acc + "<li>" + cur + "</li>"), ""}
+      ${files.map((file) => html`<li>${file}</li>`)}
     </ul>`;
   }
 }
