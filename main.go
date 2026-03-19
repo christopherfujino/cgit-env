@@ -1,8 +1,8 @@
 package main
 
 import (
-	"christopherfujino.com/distributed-compute-monorepo/notes"
-	"christopherfujino.com/distributed-compute-monorepo/service"
+	"christopherfujino.com/ros/ros-open/notes"
+	"christopherfujino.com/ros/ros-open/service"
 
 	"fmt"
 	"net/http"
