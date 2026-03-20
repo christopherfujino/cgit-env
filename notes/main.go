@@ -26,6 +26,13 @@ type tee struct {
 	endpointRoot string
 }
 
+func (t tee) Describe() service.Description {
+	return service.Description{
+		Endpoint: t.endpointRoot,
+		Text: "Notes",
+	}
+}
+
 func (t tee) Register() {
 	var fileServer = http.StripPrefix(t.endpointRoot, http.FileServer(http.Dir(filepath.Join(t.dir, "assets"))))
 	http.Handle(fmt.Sprintf("GET %s/", t.endpointRoot), fileServer)
