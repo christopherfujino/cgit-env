@@ -36,7 +36,7 @@ func (f *FS) Write(path string, contents string) {
 		// TODO we must create parents
 
 		var findFirstExistingParent func(string) = nil
-		findFirstExistingParent = func (path string) {
+		findFirstExistingParent = func(path string) {
 			if path == "/" {
 				panic("Uh oh, traversed too far up!")
 			}
@@ -65,19 +65,32 @@ func (f *FS) Write(path string, contents string) {
 }
 
 func (f FS) GetAllPaths() ([]string, error) {
-	var dirEntries, err = os.ReadDir(f.root)
-	if err != nil {
-		return nil, err
-	}
-
 	var paths = []string{}
 
-	for _, dirEntry := range dirEntries {
-		if !dirEntry.IsDir() {
-			log.Printf("Found file %s\n", dirEntry.Name())
-			paths = append(paths, dirEntry.Name())
+	var iterateDir func(string, string) error
+	iterateDir = func(absoluteParent string, relativeParent string) error {
+		var dirEntries, err = os.ReadDir(absoluteParent)
+		if err != nil {
+			return err
 		}
+
+		for _, dirEntry := range dirEntries {
+			var absoluteName = filepath.Join(absoluteParent, dirEntry.Name())
+			var relativeName = filepath.Join(relativeParent, dirEntry.Name())
+			if !dirEntry.IsDir() {
+				log.Printf("Found file %s\n", relativeName)
+				// TODO we should only append as far as to the f.root
+				paths = append(paths, relativeName)
+			} else {
+				log.Printf("Found dir %s\n", relativeName)
+				iterateDir(absoluteName, relativeName)
+			}
+		}
+
+		return nil
 	}
+
+	iterateDir(f.root, "/")
 
 	return paths, nil
 }
