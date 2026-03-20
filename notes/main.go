@@ -44,17 +44,29 @@ func (t tee) Register() {
 	http.Handle(fmt.Sprintf("GET %s/", t.endpointRoot), fileServer)
 
 	http.HandleFunc(fmt.Sprintf("GET /api%s", t.endpointRoot), func(w http.ResponseWriter, r *http.Request) {
-		var db = Open()
-		log.Printf("GET %v\n", r.URL.Path)
-
-		var res = GetNotesResponse{
-			Files: db.GetAllPaths(),
-		}
-		resBytes, err := json.Marshal(res)
-		if err != nil {
+		var fail = func(err error) {
 			w.WriteHeader(500)
 			// TODO sanitize this?
 			_, _ = w.Write([]byte(err.Error()))
+		}
+		var fs, err = Open(t.dir)
+		if err != nil {
+			fail(err)
+			return
+		}
+		log.Printf("GET %v\n", r.URL.Path)
+
+		files, err := fs.GetAllPaths()
+		if err != nil {
+			fail(err)
+			return
+		}
+		var res = GetNotesResponse{
+			Files: files,
+		}
+		resBytes, err := json.Marshal(res)
+		if err != nil {
+			fail(err)
 			return
 		}
 		_, err = w.Write(resBytes)
@@ -64,20 +76,30 @@ func (t tee) Register() {
 	})
 
 	http.HandleFunc("UPDATE /api/notes/update", func(w http.ResponseWriter, r *http.Request) {
-		var db = Open()
+		var fail = func(err error) {
+			w.WriteHeader(500)
+			// TODO sanitize this?
+			_, _ = w.Write([]byte(err.Error()))
+		}
+
+		var fs, err = Open(t.dir)
+		if err != nil {
+			fail(err)
+			return
+		}
 		log.Printf("UPDATE %v\n", r.URL.Path)
 		var buffer = bytes.Buffer{}
 		io.Copy(&buffer, r.Body)
 
 		var reqData UpdateNotesRequest
-		err := json.Unmarshal(buffer.Bytes(), &reqData)
+		err = json.Unmarshal(buffer.Bytes(), &reqData)
 		if err != nil {
 			w.WriteHeader(500)
 			// TODO sanitize this?
 			_, _ = w.Write([]byte(err.Error()))
 			return
 		}
-		db.Write(reqData.Path, reqData.Contents)
+		fs.Write(reqData.Path, reqData.Contents)
 		fmt.Printf("%s: %s\n", reqData.Path, reqData.Contents)
 		w.WriteHeader(200)
 	})
